@@ -30,6 +30,7 @@
 | `DAYS`, `CK`, `FAST`, `SKIP`, `GLOSS`, `NOTE_FIELDS` | 실습 개요, 점검표, 심화 과제, 건너뛰기 방법, 용어, 결과 노트 |
 | `dpVals` / `dpPrompt` / `dpFormHTML` | M1 상세 페이지 프롬프트를 마스터 카드 값으로 자동 완성(근거: 상위 폴더 `쿠팡스마트스토어상세페이지.md`). 값은 `ggm:dp`. 리뷰 섹션은 실제 후기 입력 시에만, 비우면 '이런 분께 추천해요'(거짓 후기·평점 생성 금지) |
 | `QUOTE` / `qtParse` / `qtReport` / `qtPrompt` | MQ 가상 OEM 견적서, AI 결과('항목: 값') 읽기, 견적 검토 자료 정리(원가 검토는 교안이 계산), 이를 넣은 프롬프트 B(AI가 결과보고서 문서 작성) 완성. 마스터 카드에는 쓰지 않는다. 값은 `ggm:qt` |
+| `PROMPTS` / `PMETA` / `promptMd` / `saveMd` | 프롬프트 원문·메타(블록·제목), 칸 내용을 스킬 형식(.md, YAML name·description) 파일로 저장. `saveMd`는 마스터 카드 저장(`saveCardMd`)과 공용. 프롬프트 칸 버튼: 초기화 · .md 저장 · 복사 |
 | `RST` | 초기화 4종(prog, prep, card, all). 버튼은 `data-rst` 속성으로 연결한다. |
 
 ## 작업 규칙

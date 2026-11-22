@@ -615,10 +615,7 @@ ${revs.length?(c.rate?'- 평점: '+c.rate+'\n':'')+revs.map(r=>'- '+r).join('\n'
 - 사용자가 만들 콘텐츠(상세 페이지, 블로그, 카드뉴스, 쇼츠 스토리보드, 제안서 등)와 주제를 말하면 위 브랜드·고객·말투·디자인 기준에 맞춰 만든다.
 - 필요한 정보가 비어 있으면 지어내지 말고 사용자에게 물어본다.${c.usage?'\n'+c.usage:''}`}
 async function saveCardMd(){
- const text=cardText(cardVals());const name=(cardVals().skill||'geto-master-card')+'.md';
- if(window.showSaveFilePicker){try{const hd=await window.showSaveFilePicker({suggestedName:name,types:[{description:'Markdown',accept:{'text/markdown':['.md']}}]});const w=await hd.createWritable();await w.write(text);await w.close();toast('저장했습니다');return}catch(e){if(e&&e.name==='AbortError')return}}
- let n=prompt('저장할 파일 이름을 입력하세요',name);if(!n)return;n=n.trim();if(!/\.md$/i.test(n))n+='.md';
- const b=new Blob([text],{type:'text/markdown;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+ return saveMd(cardText(cardVals()),(cardVals().skill||'geto-master-card')+'.md')}
 function applyPh(){const v=cardVals();document.querySelectorAll('.ph').forEach(p=>{p.textContent=v[p.dataset.k]||''});const ct=$('cardtext');if(ct)ct.textContent=cardText(v)}
 
 /* ───────── 진행률 ───────── */
@@ -747,7 +744,7 @@ function viewDay(d){
   ${d.sessions.map(s=>{const q=sessProg(s);return `<a class="dcard" href="#${s.id}"><span class="no">${s.tag.split(' · ')[0]}</span><span class="tx"><b>${s.title}</b><small>${s.clock} · ${s.time} · 따라 하기 ${q.d}/${q.n}</small><div class="mini"><s style="width:${q.pct}%"></s></div></span><span class="btn teal sm">${q.pct===100?'다시 보기':(q.d?'이어서':'시작')}</span></a>`}).join('')}`;
 }
 const optMark=s=>s.replace(/선택사항/g,'<span class="opt">선택사항</span>');
-function promptBox(id,key,title){return `<div class="prompt" data-pbox="${id}"><div class="prompt-h"><b>${optMark(esc(title))}</b><span class="pbtns"><span class="modtag" hidden>수정됨</span><button class="btn ghost sm" data-reset="${id}" title="원래 프롬프트로 되돌리기">초기화</button><button class="btn teal sm" data-copy="${id}">복사</button></span></div><textarea class="pedit" id="${id}" data-pk="${key}" spellcheck="false" aria-label="${esc(title)} (직접 수정할 수 있습니다)"></textarea></div>`}
+function promptBox(id,key,title){return `<div class="prompt" data-pbox="${id}"><div class="prompt-h"><b>${optMark(esc(title))}</b><span class="pbtns"><span class="modtag" hidden>수정됨</span><button class="btn ghost sm" data-reset="${id}" title="원래 프롬프트로 되돌리기">초기화</button><button class="btn ghost sm" data-savemd="${id}" title="지금 칸의 내용을 .md 파일로 저장 (스킬·프로젝트 지침으로 사용 가능)">.md 저장</button><button class="btn teal sm" data-copy="${id}">복사</button></span></div><textarea class="pedit" id="${id}" data-pk="${key}" spellcheck="false" aria-label="${esc(title)} (직접 수정할 수 있습니다)"></textarea></div>`}
 function viewSession(s){
   const st=LS.get('steps',{});const i=SESS.indexOf(s);
   const prev=i>0?{id:SESS[i-1].id,t:SESS[i-1].tag+' '+SESS[i-1].title}:{id:'card',t:'마스터 카드'};
@@ -840,7 +837,16 @@ function loadSuccessImg(s){
 /* ───────── 프롬프트 편집·초기화 ───────── */
 const PE={get(){return LS.get('pe',{})},set(o){LS.set('pe',o)}};
 function plain(t){const v=cardVals();return String(t||'').replace(/\{\{(\w+)\}\}/g,(m,k)=>v[k]||'')}
-const PROMPTS={};SESS.forEach(s=>(s.prompts||[]).forEach((p,k)=>{PROMPTS[s.id+'-p'+k]=p.b}));
+const PROMPTS={},PMETA={};SESS.forEach(s=>(s.prompts||[]).forEach((p,k)=>{PROMPTS[s.id+'-p'+k]=p.b;PMETA[s.id+'-p'+k]={sid:s.id,tag:s.tag,t:p.t}}));
+/* 프롬프트 한 개를 .md로 저장 (맨 위 name·description은 스킬 등록용) */
+function promptMd(key,text){const m=PMETA[key];const t=m.t.replace(/\s*\(.*$/,'').trim();const L=(t.match(/^([A-Z])\./)||[])[1]||String(Number(key.split('-p')[1])+1);
+ const name=('geto-'+m.sid+'-'+L).toLowerCase();const file=m.sid.toUpperCase()+'-'+L+'_'+t.replace(/^[A-Z]\.\s*/,'').replace(/[\\/:*?"<>|]/g,'·')+'.md';
+ const md='---\nname: '+name+'\ndescription: 게토그립 마케팅 PBL '+m.tag+' · '+t+'. 이 작업을 요청받으면 아래 프롬프트대로 결과를 만든다.\n---\n\n# '+t+'\n\n'+text.trim()+'\n';
+ return {file,md}}
+async function saveMd(text,name){
+ if(window.showSaveFilePicker){try{const hd=await window.showSaveFilePicker({suggestedName:name,types:[{description:'Markdown',accept:{'text/markdown':['.md']}}]});const w=await hd.createWritable();await w.write(text);await w.close();toast('저장했습니다');return}catch(e){if(e&&e.name==='AbortError')return}}
+ let n=prompt('저장할 파일 이름을 입력하세요',name);if(!n)return;n=n.trim();if(!/\.md$/i.test(n))n+='.md';
+ const b=new Blob([text],{type:'text/markdown;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function fitTA(ta){ta.style.height='auto';ta.style.height=Math.max(ta.scrollHeight+4,84)+'px'}
 function markMod(ta,orig){const box=ta.closest('.prompt');if(!box)return;const mod=ta.value!==orig;box.classList.toggle('mod',mod);const t=box.querySelector('.modtag');if(t)t.hidden=!mod}
 function initPrompts(){const pe=PE.get();document.querySelectorAll('textarea.pedit').forEach(ta=>{const key=ta.dataset.pk;const orig=plain(PROMPTS[key]);const saved=pe[key];ta.value=saved!==undefined?saved:orig;fitTA(ta);markMod(ta,orig)})}
@@ -1158,6 +1164,7 @@ document.addEventListener('input',e=>{
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1600)}
 function fb(t,done){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(e){toast('복사 실패: 직접 선택해 복사하세요')}a.remove()}
 document.addEventListener('click',e=>{
+  const sv=e.target.closest('[data-savemd]');if(sv){const ta=$(sv.dataset.savemd);if(!ta||!ta.value.trim()){toast('저장할 내용이 없습니다');return}const o=promptMd(ta.dataset.pk,ta.value);saveMd(o.md,o.file);return}
   const c=e.target.closest('[data-copy]');
   if(c){const el=$(c.dataset.copy);if(!el)return;const txt=el.tagName==='TEXTAREA'?el.value:el.textContent;const done=()=>toast('복사됐습니다');
     if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fb(txt,done))}else fb(txt,done);return}
