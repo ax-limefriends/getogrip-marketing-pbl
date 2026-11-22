@@ -87,6 +87,13 @@ tr.brk td{background:var(--goldL);color:#8a5a0b;font-weight:700}
 .pc p{margin:0;font-size:15px}
 .pc ol{margin:4px 0;padding-left:20px;font-size:15px}
 .pc ol li{margin:3px 0}
+.vph{background:var(--l1,#F1F5F9);border:1px solid var(--l3);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.vph-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;font-size:14px;color:var(--navy)}
+.vph-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.vph-g a{display:flex;flex-direction:column;gap:3px;text-decoration:none;color:var(--navy);font-size:12px;font-weight:700;text-align:center}
+.vph-g img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:6px;border:1px solid var(--l3);background:#fff}
+.vph-g a:hover img{outline:2px solid var(--teal)}
+.vph small{font-size:12px;color:#64748B}
 .verify{margin-top:auto;border-top:1px dashed var(--l3);padding-top:10px}
 .verify label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700;color:var(--navy);font-size:14.5px}
 .verify input{width:20px;height:20px;accent-color:var(--teal);flex:none;margin-top:1px}
@@ -248,9 +255,9 @@ const PREP=[
  {id:'gem',title:'AI 계정 (Gemini 또는 ChatGPT) · Google Flow 확인',who:'훈련생',days:'M0부터 · 특히 M3 쇼츠',topic:'상세 페이지·카드뉴스 이미지, 동영상 생성, 스킬 저장',danger:true,
   steps:['M0~M2·M4는 <b>Gemini와 ChatGPT 중 편한 도구 하나</b>로 진행합니다. 크롬에서 쓸 도구에 로그인합니다. 비밀번호는 본인이 직접 입력합니다.','스킬 메뉴를 확인합니다. Gemini는 사이드바 <b>맞춤설정 → 스킬</b>, ChatGPT는 입력창에 <b>/</b>를 쳤을 때 스킬 목록이 나오는지 봅니다. 이미지 만들기가 되는지도 확인합니다. 메뉴 이름·위치는 업데이트로 바뀔 수 있습니다.','<b>M3 쇼츠 영상은 Google Flow</b>에서 만듭니다. <code>labs.google/flow</code>에 Gemini 유료 계정으로 로그인해 새 프로젝트가 열리는지, <b>이미지 만들기</b>와 <b>프레임으로 동영상 만들기</b> 메뉴가 보이는지 확인합니다.','테스트로 짧은 영상 1개를 만들어 봅니다(예: "잔디 위를 걷는 운동화, 8초"). 생성마다 <b>AI 크레딧</b>이 차감되니 테스트는 1개만 하고, 남은 크레딧을 확인해 둡니다.','Google Flow 영상 생성에는 <b>Gemini 유료 계정</b>이 필요합니다. 개인 계정이 무료라면 회사의 유료 계정으로 로그인합니다.'],
   verify:'쓸 AI 도구에서 스킬·이미지가 되고, Google Flow에서 영상 생성이 열린다'},
- {id:'photo',title:'제품 사진·짧은 영상 촬영',who:'훈련생',days:'M1 상세 페이지 · M3 쇼츠',topic:'상세 페이지 10장, 사진→영상 변환, 쇼츠 실제 컷',
-  steps:['스마트폰으로 <b>실제 제품 사진 5장 이상</b>을 찍습니다: 정면, 옆면, <b>아웃솔(바닥) 클로즈업</b>, 인솔, 착용 컷.','밝은 곳에서 흰 벽이나 단색 배경으로 찍으면 AI가 모양을 더 정확히 따라 합니다.','가능하면 <b>세로로 5초짜리 실제 영상</b> 2개(신고 걷기, 바닥 클로즈업)도 찍어 둡니다. AI 영상과 섞으면 제품 모양이 정확하게 나옵니다.','경쟁사·인터넷 사진은 쓰지 않습니다(저작권).','<span class="opt">선택사항</span> 네이버 스마트스토어에서 "파크골프화"를 검색해 마음에 드는 상세 페이지 1~2개를 휴대폰으로 캡처해 둡니다. <b>레이아웃 참고용</b>이며 이미지 안에 그대로 쓰지 않습니다.'],
-  verify:'제품 사진 5장 이상(가능하면 세로 영상 2개)이 노트북에 있다'},
+ {id:'photo',title:'제품 사진 준비 (교육용 가상 사진 내려받기)',who:'훈련생',days:'M1 상세 페이지 · M2 카드뉴스 · M3 쇼츠',topic:'상세 페이지 10장, 카드뉴스, 스토리보드 이미지',gallery:1,
+  steps:['이 수업은 <b>가상 제품(파크골프화 GP-200)</b>으로 실습합니다. 위 <b>교육용 가상 사진 5장</b>(옆면·정면·아웃솔·인솔·착용 컷)을 내려받아 작업 폴더의 <code>photo</code>에 넣습니다. 교안에서 "실제 제품 사진을 첨부"라고 하면 이 사진을 씁니다.','가상 사진은 AI로 만든 <b>교육용 이미지</b>입니다. 실제 판매·게시에는 쓰지 않고, 실제 제품을 팔 때는 직접 찍은 사진으로 바꿉니다.','<span class="opt">선택사항</span> 실제 제품이 있다면 스마트폰으로 <b>실제 제품 사진 5장 이상</b>(정면, 옆면, 아웃솔 클로즈업, 인솔, 착용 컷)을 찍어 써도 됩니다. 밝은 곳에서 흰 벽이나 단색 배경으로 찍고, 세로 5초 영상 2개(신고 걷기, 바닥 클로즈업)도 찍어 두면 좋습니다.','경쟁사·인터넷 사진은 쓰지 않습니다(저작권).','<span class="opt">선택사항</span> 네이버 스마트스토어에서 "파크골프화"를 검색해 마음에 드는 상세 페이지 1~2개를 휴대폰으로 캡처해 둡니다. <b>레이아웃 참고용</b>이며 이미지 안에 그대로 쓰지 않습니다.'],
+  verify:'가상 사진 5장(또는 실제 제품 사진 5장 이상)이 노트북의 photo 폴더에 있다'},
  {id:'fact',title:'제품 팩트 시트 (사실만)',who:'훈련생',days:'M0 · M1',topic:'AI가 지어내지 않도록, 근거가 되는 사실 정리',danger:true,
   steps:['제품명·소재·무게·사이즈 범위·색상·가격을 메모합니다.','<b>시험성적서·특허·인증</b>이 있으면 번호와 함께 적습니다. 없는 수치는 AI 결과물에 쓰지 않습니다.','고객에게 실제로 들은 말(후기) 2~3개를 적어 둡니다. 블로그·상세 페이지에 근거로 씁니다.','<a href="#card">마스터 카드</a>의 강점 3가지를 실제 제품에 맞게 고칩니다.'],
   verify:'제품 사실과 근거(시험·인증·후기)가 메모되어 있다'},
@@ -510,7 +517,7 @@ MOQ:
 const SCHED=[['11:00~11:20','m0','20분'],['11:20~11:35','mq','15분'],['11:35~12:00','m1','25분','카드 확인 · A 상품명 · 확인·사진 준비'],['12:00~13:00',null,'60분','점심시간 (교육시간 제외)'],['13:00~13:35','m1','35분','상세 페이지 10장 · 확인·저장'],['13:35~14:15','m2','40분'],['14:15~15:20','m3','65분'],['15:20~16:00','m4','40분']];
 const DAYS=[{id:'d1',n:1,hours:4,title:'제품 하나로 상세 페이지부터 쇼츠까지',theme:'M0 · MQ · M1 · M2 · M3 · M4',
  out:'마스터 카드·페르소나·스킬 · OEM 견적 검토 결과보고서 · 상세 페이지 이미지 10장·상품명 · 블로그 1편·카드뉴스 5장 · 15초 쇼츠 1편 · 4주 캘린더·마스터 카드 스킬',
- bring:['노트북·충전기','Gemini 또는 ChatGPT 로그인 (영상은 Google Flow)','제품 사진 5장+','제품 팩트 시트','CapCut 설치'],sessions:SESSIONS}];
+ bring:['노트북·충전기','Gemini 또는 ChatGPT 로그인 (영상은 Google Flow)','제품 사진 5장 (사전준비 카드에서 가상 사진 내려받기)','제품 팩트 시트','CapCut 설치'],sessions:SESSIONS}];
 
 const CK={
  review:['수치·시험·특허·인증은 근거 자료와 대조했고, 근거 없는 것은 지웠다','질병 치료·예방(족저근막염, 관절 등) 표현이 없다','최고·1위·100%·절대 같은 표현이 없거나 근거를 붙였다','AI 이미지·영상 속 신발이 실제 제품과 다른 컷은 실제 사진으로 바꿨거나 분위기 컷으로만 썼다','후기·별점은 마스터 카드의 실제 고객 후기만 썼다','이미지 속 한글 오타·깨진 글자와 워터마크를 확인했다','경쟁사·인터넷 사진, 외부 음원을 쓰지 않았다','AI로 만든 이미지·영상이 들어간 블로그·카드뉴스·쇼츠는 캡션(\'(AI로 만든 이미지)\')이나 플랫폼의 AI 표시를 한다','최종 문구를 직접 다시 읽고 확인했다'],
@@ -685,6 +692,13 @@ function viewHome(){
   <div class="callout warn"><b>AI 결과는 초안입니다.</b> AI는 없는 시험 결과·수치를 그럴듯하게 만들 수 있고, 이미지·영상 속 신발은 실제와 다를 수 있습니다. 제품 사실과 광고 표현은 사람이 직접 최종 확인합니다.</div>
   <div class="callout ok"><b>과정 위치</b> AI훈련로드맵(2026-07-25)의 2·3단계와 PBL 과제 중 <b>마케팅 콘텐츠(상세 페이지·블로그·SNS·쇼츠)</b>를 4시간 실습으로 압축했습니다. <b>OEM 품질관리 교육</b>으로 진행하며, 검수된 품질을 고객에게 정확히 알리는 데 초점을 둡니다. 로드맵 목표(블로그 월 4회, 쇼츠 2편)는 오늘 1편씩 만든 뒤 4주 캘린더로 이어 갑니다.</div>`;
 }
+/* 교육용 가상 제품 사진 (img/gp200/) */
+const VPHOTO=[['gp200_01_side.jpg','1 옆면'],['gp200_02_front.jpg','2 정면'],['gp200_03_outsole.jpg','3 아웃솔'],['gp200_04_insole.jpg','4 인솔'],['gp200_05_wear.jpg','5 착용 컷']];
+function vphotoHTML(){
+  return `<div class="vph"><div class="vph-h"><b>교육용 가상 사진 · GP-200 화이트</b><a class="btn teal sm" href="img/gp200/gp200_virtual_photos.zip" download="GP-200_교육용가상사진_5장.zip">5장 모두 내려받기(.zip)</a></div>
+  <div class="vph-g">${VPHOTO.map(([f,l])=>`<a href="img/gp200/${f}" download="${f}" title="${l} 내려받기"><img src="img/gp200/${f}" alt="GP-200 교육용 가상 사진 ${l}" loading="lazy"><span>${l} · 내려받기</span></a>`).join('')}</div>
+  <small>AI로 만든 교육용 가상 이미지입니다. 사진을 누르면 한 장씩 내려받습니다.</small></div>`;
+}
 function viewPrep(){
   const done=LS.get('prep',{});const n=prepCount();
   return `<div class="eyebrow">READY · 교육 시작 전</div><h1 class="t">사전준비 카드 ${PREP.length}장</h1>
@@ -695,7 +709,7 @@ function viewPrep(){
     <div class="pc-top"><span class="pc-no">${i+1}</span><h4>${p.title}</h4></div>
     <div class="tags"><span class="tag t">쓰는 때 · ${p.days}</span><span class="tag ${p.danger?'r':'g'}">준비 · ${p.who}</span></div>
     <p><b>실습 연결</b> · ${p.topic}</p>
-    <ol>${p.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+    ${p.gallery?vphotoHTML():''}<ol>${p.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
     <div class="verify"><label><input type="checkbox" data-prep="${p.id}" ${done[p.id]?'checked':''}> 확인: ${p.verify}</label></div></div>`).join('')}</div>
   <div class="pnav"><span></span><a class="next" href="#card"><small>다음</small><b>마스터 카드</b></a></div>`;
 }
